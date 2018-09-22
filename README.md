@@ -8,6 +8,10 @@ For this demo, we have the following
 - private network interface: 10.1.2.x
 - public virtual ip:         10.252.236.100
 
+## Deployment Diagram
+
+![images/haproxy_ansible_setup_image.png](images/haproxy_ansible_setup_image.png)
+
 ## Our backend servers are running JBoss EAP running on the following endpoints:
 
    - 10.1.2.1:8080
