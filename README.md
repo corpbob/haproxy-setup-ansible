@@ -12,7 +12,17 @@ For this demo, we have the following
 
 ![images/haproxy_ansible_setup_image.png](images/haproxy_ansible_setup_image.png)
 
+Clients will access the service at the public virtual IP. The HAProxy will proxy these requests to one of the backend servers.
+
+The keepalived daemon assigns the public virtual IP to the master. On the event that the master will be unavailable, the keepalived will assign the public virtual IP to the backup.
+ 
 ## Our backend servers are running JBoss EAP running on the following endpoints:
 
    - 10.1.2.1:8080
    - 10.1.2.1:8180
+
+## To install this setup, run the following:
+
+```
+ansible-playbook -i hosts main.yaml
+```
