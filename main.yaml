@@ -1,0 +1,86 @@
+---
+- hosts: master,backups
+  tasks:
+    - name: load vars
+      include_vars: 
+        file: variables
+
+    - name: install required packages
+      yum:
+        name: '{{ packages }}'
+      vars: 
+        packages: 
+          - keepalived
+          - haproxy
+          - firewalld
+
+    - name: install the keepalived master config file
+      template:
+        src: keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+      vars:
+        keepalived_state: "MASTER"
+        keepalived_priority: '{{ keepalived_max_priority }}'
+      when: inventory_hostname == 'master'
+
+    - name: install the keepalived config file
+      template:
+        src: keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+      vars:
+        keepalived_state: "BACKUP"
+        keepalived_priority: '{{ keepalived_max_priority -1 }}'
+      when: inventory_hostname | search("backup")
+
+    - name: install haproxy template
+      template:
+        src: haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+ 
+    - name: Run firewalld
+      command: systemctl start firewalld
+
+    - name: Enable firewalld
+      command: systemctl enable firewalld
+
+    - name: Open port 80
+      firewalld: 
+        zone: public 
+        permanent: true
+        port: 80/tcp 
+        state: enabled
+
+    - name: Open port 443
+      firewalld:
+        zone: public
+        permanent: true
+        port: 443/tcp
+        state: enabled
+
+    - name: Reload firewalld
+      command: firewall-cmd --reload
+
+    - name: Upload haproxy-http.xml
+      copy:
+        src: haproxy-http.xml
+        dest: /etc/firewalld/services/haproxy-http.xml
+
+    - name: Assign correct SELinux context
+      command: restorecon haproxy-http.xml
+      args:
+        chdir: /etc/firewalld/services
+
+    - name: Change permissions to haproxy-http.xml
+      command: chmod 640 haproxy-http.xml
+      args:
+        chdir: /etc/firewalld/services
+
+    - name: All haproxy to connect to our services
+      command: setsebool -P haproxy_connect_any on
+
+    - name: Enable keepalived and haproxy
+      command: systemctl enable keepalived haproxy
+
+    - name: Start keepalived and haproxy
+      command: systemctl start keepalived haproxy
+

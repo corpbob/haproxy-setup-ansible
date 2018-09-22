@@ -1,0 +1,11 @@
+keepalived_network_interface: enp0s8 
+virtual_ip_address: 10.252.236.100
+keepalived_max_priority: 101
+
+backend:
+  name: app
+  balance: "roundrobin"
+  mode: "http"
+  servers:
+    - "10.1.2.1:8080"
+    - "10.1.2.1:8180"

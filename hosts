@@ -1,0 +1,5 @@
+[master]
+master ansible_host=10.252.236.152 ansible_ssh_private_key_file=/root/.ssh/id_rsa ansible_user=root
+
+[backups]
+backup1 ansible_host=10.252.236.151 ansible_ssh_private_key_file=/root/.ssh/id_rsa ansible_user=root
