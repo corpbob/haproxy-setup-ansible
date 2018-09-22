@@ -1,6 +1,8 @@
 # This is a simple setup for a Highly Available HAProxy
 
-## The setup needs 2 VMs. Each VM has 2-network interfaces. One interface is the public interface and the other is a private interface.
+## The setup
+
+We need 2 VMs. Each VM has 2-network interfaces. One interface is the public interface and the other is a private interface.
 
 For this demo, we have the following
 
