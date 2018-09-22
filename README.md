@@ -26,3 +26,11 @@ The keepalived daemon assigns the public virtual IP to the master. On the event 
 ```
 ansible-playbook -i hosts main.yaml
 ```
+
+## To test if it's working, access the public ip and tail the logs of both backend servers:
+
+```
+for i in `seq 1 10`
+  do curl http://10.252.236.100/helloworld/
+done
+```
