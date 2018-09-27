@@ -1,4 +1,4 @@
-# This is a simple setup for a Highly Available HAProxy
+# This is a simple setup for a Highly Available HAProxy Using Ansible
 
 ## The setup
 
